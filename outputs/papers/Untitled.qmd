@@ -1,0 +1,44 @@
+---
+title: "Practice"
+date: "19 January 2023"
+author: "Tayedza Allison Chikumbirike"
+abstract: "We are practicing using quarto and this is a random abstract I wrote."
+format: pdf
+bibliography: pracreferences.bib
+---
+## Introduction
+
+We examine the average bill length of penguins using @citationprac. Another way
+to do citations is [@citationprac]. We are gonna use @opendatatoronto in Paper 1.
+Tidyverse has a lot of cool fuctions like filter(), arrange(), and many more [@tidyverse]. We have a graph too at @fig-practice that displays this.
+
+## Quarto
+
+```{r}
+#| message: false
+#| echo: false
+#| tbl-cap: "Positive relationship between bill length and depth in penguins."
+#| label: fig-practice
+
+library(tidyverse)
+palmerpenguins::penguins |>
+  select(species, bill_length_mm) |>
+  group_by(species) |>
+  summarize(the_mean = mean(bill_length_mm, na.rm = TRUE))
+knitr::kable()
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+#| fig-cap: "Positive relationship between bill length and depth in penguins."
+#| label: fig-practice
+
+palmerpenguins::penguins |>
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+  geom_point()
+```
+
+# References 
+

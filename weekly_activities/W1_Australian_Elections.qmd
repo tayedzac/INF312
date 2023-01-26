@@ -1,0 +1,149 @@
+---
+title: "Exploring the 2022 Australian Election"
+author: "Tayedza Chikumbirike"
+format: html
+---
+
+```{r}
+#### Preamble ####
+# Purpose: Read in data from the 2022 Australian Election and make a
+# graph of the number of seats each party won.
+# Author: Tayedza Chikumbirike
+# Email: t.chikumbirike@mail.utoronto.ca
+# Date: 20 January 2023
+# Prerequisites: Need to know where to get Australian elections data.
+```
+
+```{r}
+#### Workspace set-up ####
+install.packages("tidyverse") # Do this once per computer
+install.packages("janitor") # This also
+
+library(tidyverse)
+library(janitor)
+library(dplyr)
+```
+
+```{r}
+simulated_data <-
+  tibble(
+    # Use 1 through to 151 to represent each division
+    "Division" = 1:151,
+    # Randomly pick an options, with replacement, 151 times
+    "Party" = sample(
+      x = c(
+        "Liberal",
+        "Labor",
+        "National",
+        "Green",
+        "Other"
+      ),
+      size = 151,
+      replace = TRUE
+    )
+  )
+
+simulated_data
+```
+
+```{r}
+#### Read in the data ####
+raw_elections_data <-
+  read_csv(
+    file = 
+      "https://results.aec.gov.au/27966/website/Downloads/HouseMembersElectedDownload-27966.csv",
+    show_col_types = FALSE,
+    skip = 1
+  )
+
+# We have read the data from the AEC website. We may like to save
+# it in case something happens or they move it.
+write_csv(
+  x = raw_elections_data,
+  file = "australian_voting.csv"
+)
+
+head(raw_elections_data)
+```
+
+```{r}
+#### Basic cleaning ####
+raw_elections_data <-
+  read_csv(
+    file = "australian_voting.csv",
+    show_col_types = FALSE
+  )
+
+# Make the names easier to type
+cleaned_elections_data <-
+  clean_names(raw_elections_data)
+
+cleaned_elections_data <-
+  cleaned_elections_data |>
+  # Select only certain columns
+  select(
+    division_nm,
+    party_nm
+  )
+
+names(cleaned_elections_data)
+
+cleaned_elections_data <-
+  cleaned_elections_data |>
+  rename(
+    division = division_nm,
+    elected_party = party_nm
+  )
+
+cleaned_elections_data$elected_party |>
+  unique()
+
+cleaned_elections_data <-
+  cleaned_elections_data |>
+  mutate(
+    elected_party =
+      recode(
+        elected_party,
+        "Australian Labor Party" = "Labor",
+        "Liberal National Party of Queensland" = "Liberal",
+        "The Nationals" = "Nationals",
+        "The Greens" = "Greens",
+        "Independent" = "Other",
+        "Katter's Australian Party (KAP)" = "Other",
+        "Centre Alliance" = "Other"
+      )
+  )
+
+head(cleaned_elections_data)
+```
+
+```{r}
+write_csv(
+  x = cleaned_elections_data,
+  file = "cleaned_elections_data.csv"
+)
+```
+
+```{r}
+#### Read in the data ####
+cleaned_elections_data <-
+  read_csv(
+    file = "cleaned_elections_data.csv",
+    show_col_types = FALSE
+  )
+
+cleaned_elections_data |>
+  count(elected_party)
+```
+
+```{r}
+cleaned_elections_data |>
+  ggplot(aes(x = elected_party)) +
+  geom_bar() +
+  theme_minimal() + # Make the theme neater
+  labs(
+    x = "Party",
+    y = "Number of seats"
+  ) # Make the labels more meaningful
+```
+

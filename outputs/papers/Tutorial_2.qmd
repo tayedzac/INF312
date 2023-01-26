@@ -1,0 +1,43 @@
+---
+title: "Tutorial 2: Code Review"
+author: "Tayedza Allison Chikumbirike"
+format: pdf
+---
+## Introduction
+
+For this task, I am going to be review my classmate's code that they created as part of the tutorial activity. To guide my review, I will be using Google's guide to code reviews. I will be exploring the design, tests, naming, comments, style, consistency, and lines.
+
+## Design
+
+The design of the code that I am reviewing is fairly simple. The main critique that I have is that all aspects of the code are combined into a singular r chuck. Perhaps the importing, cleaning, and graphing could be three different chunks.
+
+## Tests
+
+In this code, there are no tests. However there are a few sections that call for a preview of the data table after making adjustments during the cleaning process. I think this was done for the coder to visually test that the code did as was intended however it would help to include code that tested that for her.
+
+## Naming
+
+The naming used in this code was very easy to under to understand. For example, the imported data was labeled "data" and once the data was cleaned for its intended purposes, it was called "cleaned_data". Outside of this, there weren't any other instances were naming was required.
+
+## Comments
+
+There was good use of comments in this code. However, there are comments that came attached to the data import code which I don't think are necessary to keep. For example,
+
+```{r}
+#identify datastore resources; by default, Toronto Open Data sets datastore 
+#format to CSV for non-geospatial and GeoJSON for geospatial resources.
+```
+This comment is not necessary to keep in order for me to understand what is going on with the code.
+
+## Style & Consistency
+
+In terms of style, this code does follow the style guide that Google has set for R. None of the discouraged functions were used and everything else was used appropriately.
+
+## Lines
+
+In terms of lines, I think each line in the code has an intended purpose. There was also appropriate line spacing between different sections which makes it easier for the human eye to follow when reading the code. The main adjustment that I would suggest to the coder is to remove comments that aren't necessary.
+
+## Conclusion
+
+In conclusion, the coder create a really got set of code that was able to complete it intended function well. There were no major issues, just a few minor adjustments regarding the use of comments.
+

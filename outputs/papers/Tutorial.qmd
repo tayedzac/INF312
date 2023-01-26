@@ -1,0 +1,52 @@
+---
+title: "Tutorial 1"
+author: "Tayedza Chikumbirike"
+format: html
+editor: visual
+---
+
+```{r}
+#### Preamble ####
+# Purpose: Cleans a data set from opendatatoronto and create a graph.
+# Author: Tayedza Chikumbirike
+# Email: t.chikumbirike@mail.utoronto.ca
+# Date: 19 January 2023
+# Prerequisites: Need to know where to get data and be caught up with chapters 2 & 3.
+```
+
+```{r}
+#### Workspace set-up ####
+install.packages("tidyverse")
+install.packages("janitor")
+
+library(tidyverse)
+library(janitor)
+library(opendatatoronto)
+library(dplyr)
+
+# get package
+package <- show_package("police-race-and-identity-based-data-use-of-force")
+package
+
+# get all resources for this package
+resources <- list_package_resources("police-race-and-identity-based-data-use-of-force")
+
+# identify datastore resources; by default, Toronto Open Data sets datastore resource format to CSV for non-geospatial and GeoJSON for geospatial resources
+datastore_resources <- filter(resources, tolower(format) %in% c('csv', 'geojson'))
+
+# load the first datastore resource as a sample
+data <- filter(datastore_resources, row_number()==1) |> get_resource()
+
+# cleaning the data
+clean_data <- clean_names(data) |>
+  select(type_of_incident, call_for_service_type, perceived_race_of_people_involv, incident_count) |>
+  filter(call_for_service_type == "VEHICLE RELATED") |>
+  filter(type_of_incident == " Enforcement Action Incidents") |>
+  rename(incident = type_of_incident, service_type = call_for_service_type, perceived_race = perceived_race_of_people_involv)
+
+# graphing the data
+clean_data |>
+  ggplot(aes(x = perceived_race, y = incident_count, color = perceived_race)) +
+  scale_x_discrete(label=function(x) abbreviate(x, minlength = 6)) +
+  geom_col()
+```
