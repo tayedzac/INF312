@@ -1,0 +1,7 @@
+---
+title: "Short Term Rentals Registrations"
+author: "Tayedza Allison Chikumbirike"
+format: html
+bibliography: pracreferences.bib
+---
+
